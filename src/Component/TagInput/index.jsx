@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './index.css'
 
-const TagsInput = ({ onChange, register }) => {
+const TagsInput = ({ onChange, setValue }) => {
   const [tags, setTags] = useState([]);
   const [input, setInput] = useState('');
 
@@ -12,6 +12,7 @@ const TagsInput = ({ onChange, register }) => {
         const newTags = [...tags, input.trim()];
         setTags(newTags);
         onChange(newTags);
+        setValue('tags', newTags)
         setInput(''); // Clear input after adding tag
       }
     }
@@ -27,7 +28,6 @@ const TagsInput = ({ onChange, register }) => {
   return (
     <div className="tags-input-container">
     <input
-      {...register("tags")}
       type="text"
       value={input}
       onChange={(e) => setInput(e.target.value)} // Update input value

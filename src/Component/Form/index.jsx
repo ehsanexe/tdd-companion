@@ -1,15 +1,15 @@
 import React from "react";
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import "./index.css";
 import TagsInput from "../TagInput";
 
 const Form = () => {
-  const methods = useForm();
   const {
+    register,
+    setValue,
     handleSubmit,
-    formState: { errors },
-    getValues,
-  } = methods;
+    formState: {errors}
+  } = useForm();
 
   const onSubmit = (data) => {
     console.log({data})
@@ -166,7 +166,6 @@ const Form = () => {
   };
 
   return (
-    <FormProvider {...methods}>
       <form className="tech-form" onSubmit={handleSubmit(onSubmit)}>
         <div className="dropdown-container">
           <div className="form-row">
@@ -174,7 +173,7 @@ const Form = () => {
               <label htmlFor="language">Language</label>
               <select
                 id="language"
-                {...methods.register("language", { required: true })}
+                {...register("language", { required: true })}
               >
                 <option value="">Select...</option>
                 {languages.map((language) => (
@@ -190,7 +189,7 @@ const Form = () => {
               <label htmlFor="framework">Framework</label>
               <select
                 id="framework"
-                {...methods.register("framework", { required: true })}
+                {...register("framework", { required: true })}
               >
                 <option value="">Select...</option>
                 {frameworks.map((framework) => (
@@ -207,7 +206,7 @@ const Form = () => {
               <label htmlFor="library">Library</label>
               <select
                 id="library"
-                {...methods.register("library", { required: true, })}
+                {...register("library", { required: true, })}
               >
                 <option value="">Select...</option>
                 {libraries.map((library) => (
@@ -223,7 +222,7 @@ const Form = () => {
               <label htmlFor="role">Role</label>
               <select
                 id="role"
-                {...methods.register("role", { required: true })}
+                {...register("role", { required: true })}
               >
                 <option value="">Select...</option>
                 {roles.map((role) => (
@@ -239,21 +238,20 @@ const Form = () => {
 
         <div className="form-group full-width">
           <label htmlFor="tags">Tags</label>
-          <TagsInput register={methods.register} onChange={handleTagsChange} />
+          <TagsInput onChange={handleTagsChange} setValue={setValue} />
         </div>
 
         <div className="form-group">
           <label htmlFor="description">Description</label>
           <textarea
             id="description"
-            {...methods.register("description", { required: true })}
+            {...register("description", { required: true })}
           />
           {errors.description && <p>This field is required</p>}
         </div>
 
         <button type="submit">Submit</button>
       </form>
-    </FormProvider>
   );
 };
 
