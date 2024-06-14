@@ -1,18 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import "./index.css";
 import TagsInput from "../TagInput";
+import { Autocomplete, Button, TextField } from "@mui/material";
 
 const Form = () => {
   const {
     register,
     setValue,
     handleSubmit,
-    formState: {errors}
+    formState: { errors },
   } = useForm();
 
+  const [output, setOutput] = useState("");
+
   const onSubmit = (data) => {
-    console.log({data})
+    console.log({ data });
+    // setOutput
   };
 
   const languages = [
@@ -166,92 +170,93 @@ const Form = () => {
   };
 
   return (
-      <form className="tech-form" onSubmit={handleSubmit(onSubmit)}>
-        <div className="dropdown-container">
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="language">Language</label>
-              <select
-                id="language"
-                {...register("language", { required: true })}
-              >
-                <option value="">Select...</option>
-                {languages.map((language) => (
-                  <option key={language} value={language}>
-                    {language}
-                  </option>
-                ))}
-              </select>
-              {errors.language && <p>This field is required</p>}
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="framework">Framework</label>
-              <select
-                id="framework"
-                {...register("framework", { required: true })}
-              >
-                <option value="">Select...</option>
-                {frameworks.map((framework) => (
-                  <option key={framework} value={framework}>
-                    {framework}
-                  </option>
-                ))}
-              </select>
-              {errors.framework && <p>This field is required</p>}
-            </div>
+    <form className="tech-form" onSubmit={handleSubmit(onSubmit)}>
+      <div className="dropdown-container">
+        <div className="form-row">
+          <div>
+            <Autocomplete
+              disablePortal
+              id="language"
+              options={languages}
+              sx={{ width: 300 }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  {...register("language", { required: true })}
+                  label="Language"
+                />
+              )}
+            />
           </div>
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="library">Library</label>
-              <select
-                id="library"
-                {...register("library", { required: true, })}
-              >
-                <option value="">Select...</option>
-                {libraries.map((library) => (
-                  <option key={library} value={library}>
-                    {library}
-                  </option>
-                ))}
-              </select>
-              {errors.library && <p>This field is required</p>}
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="role">Role</label>
-              <select
-                id="role"
-                {...register("role", { required: true })}
-              >
-                <option value="">Select...</option>
-                {roles.map((role) => (
-                  <option key={role} value={role}>
-                    {role}
-                  </option>
-                ))}
-              </select>
-              {errors.role && <p>This field is required</p>}
-            </div>
+          <div>
+            <Autocomplete
+              disablePortal
+              id="Framework"
+              options={frameworks}
+              sx={{ width: 300 }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  {...register("Framework", { required: true })}
+                  label="Framework"
+                />
+              )}
+            />
           </div>
         </div>
-
-        <div className="form-group full-width">
-          <label htmlFor="tags">Tags</label>
-          <TagsInput onChange={handleTagsChange} setValue={setValue} />
+        <div className="form-row">
+          <div>
+            <Autocomplete
+              disablePortal
+              id="library"
+              options={libraries}
+              sx={{ width: 300 }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  {...register("library", { required: true })}
+                  label="library"
+                />
+              )}
+            />
+          </div>
+          <div>
+            <Autocomplete
+              disablePortal
+              id="Role"
+              options={roles}
+              sx={{ width: 300 }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  {...register("Role", { required: true })}
+                  label="Role"
+                />
+              )}
+            />
+          </div>
         </div>
+      </div>
 
-        <div className="form-group">
-          <label htmlFor="description">Description</label>
-          <textarea
-            id="description"
-            {...register("description", { required: true })}
-          />
-          {errors.description && <p>This field is required</p>}
-        </div>
+      <div className="form-group full-width">
+        <label htmlFor="tags">Tags</label>
+        <TagsInput onChange={handleTagsChange} setValue={setValue} />
+      </div>
 
-        <button type="submit">Submit</button>
-      </form>
+      <div>
+        <TextField
+          id="description"
+          label="Description"
+          multiline
+          rows={4}
+          sx={{ width: 600 }}
+          {...register("description", { required: true })}
+        />
+        {errors.description && <p>This field is required</p>}
+      </div>
+
+      <Button variant="contained" type="submit">Contained</Button>
+    </form>
   );
 };
 

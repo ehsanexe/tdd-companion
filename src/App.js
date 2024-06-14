@@ -1,14 +1,24 @@
+import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import "./App.css";
 import Form from "./Component/Form";
 
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
+
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>TDD Companion Form</h1>
-        <Form />
-      </header>
-    </div>
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <div className="App">
+        <header className="App-header">
+          <h1>TDD Companion Form</h1>
+          <Form />
+        </header>
+      </div>
+    </ThemeProvider>
   );
 }
 
