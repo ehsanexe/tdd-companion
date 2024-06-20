@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
-import './index.css'
+import React, { useState } from "react";
+import "./index.css";
+import { Chip, TextField } from "@mui/material";
 
 const TagsInput = ({ onChange, setValue }) => {
   const [tags, setTags] = useState([]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && input.trim()) {
+    if (e.key === "Enter" && input.trim()) {
       e.preventDefault();
       if (!tags.includes(input.trim())) {
         const newTags = [...tags, input.trim()];
         setTags(newTags);
         onChange(newTags);
-        setValue('tags', newTags)
-        setInput(''); // Clear input after adding tag
+        setValue("tags", newTags);
+        setInput(""); // Clear input after adding tag
       }
     }
   };
@@ -27,21 +28,22 @@ const TagsInput = ({ onChange, setValue }) => {
 
   return (
     <div className="tags-input-container">
-    <input
-      type="text"
-      value={input}
-      onChange={(e) => setInput(e.target.value)} // Update input value
-      onKeyDown={handleKeyDown}
-    />
-    <div className="tags-container">
-      {tags.map((tag, index) => (
-        <div className="tag" key={index}>
-          {tag}
-          <button type="button" onClick={() => handleRemoveTag(index)}>x</button>
-        </div>
-      ))}
+      <TextField
+        value={input}
+        onChange={(e) => setInput(e.target.value)} // Update input value
+        onKeyDown={handleKeyDown}
+        sx={{ width: 300 }}
+      />
+      <div className="tags-container">
+        {tags.map((tag, index) => (
+          <Chip
+            label={tag}
+            variant="outlined"
+            onDelete={() => handleRemoveTag(index)}
+          />
+        ))}
+      </div>
     </div>
-  </div>
   );
 };
 

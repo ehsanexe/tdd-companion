@@ -9,33 +9,5 @@
   right: 0;
   display: flex;
   flex-wrap: wrap;
-  padding: 4px;
+  padding: 0 4px;
 }
-
-.tag {
-  background-color: #e0e0e0;
-  color: #333;
-  border-radius: 16px; /* Make the tags capsules */
-  padding: 4px 8px;
-  margin-right: 8px;
-  margin-bottom: 8px; /* Adjust margin to separate tags */
-  display: flex; /* Display tags as inline-flex items */
-  align-items: center;
-}
-
-.tag button {
-  margin-left: 4px;
-  cursor: pointer;
-  background: none;
-  border: none;
-  color: #888;
-  margin-top: 0px;
-}
-
-.tags-input-container input[type="text"] {
-  width: calc(100% - 20px); /* Adjust width of input to accommodate button */
-  width: 48%;
-  border: 1px solid #ccc;
-}
-
-

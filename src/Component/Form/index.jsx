@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import "./index.css";
 import TagsInput from "../TagInput";
 import { Autocomplete, Button, TextField } from "@mui/material";
+import { frameworks, languages, libraries, roles } from "./const";
 
 const Form = () => {
   const {
@@ -10,6 +11,7 @@ const Form = () => {
     setValue,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm();
 
   const [output, setOutput] = useState("");
@@ -18,152 +20,6 @@ const Form = () => {
     console.log({ data });
     // setOutput
   };
-
-  const languages = [
-    "JavaScript",
-    "Python",
-    "Java",
-    "C#",
-    "C++",
-    "PHP",
-    "Ruby",
-    "Swift",
-    "Kotlin",
-    "TypeScript",
-    "Go",
-    "Rust",
-    "Objective-C",
-    "Scala",
-    "Perl",
-    "R",
-    "MATLAB",
-    "Dart",
-    "Elixir",
-    "Haskell",
-    "Lua",
-    "C",
-    "Shell",
-    "Groovy",
-    "VB.NET",
-    "F#",
-    "Erlang",
-    "Julia",
-    "PowerShell",
-    "COBOL",
-    "Fortran",
-    "Ada",
-    "Lisp",
-    "Scheme",
-    "Prolog",
-    "Racket",
-    "Assembly",
-    "SQL",
-    "HTML/CSS",
-    "SAS",
-  ];
-  const frameworks = [
-    "React",
-    "Angular",
-    "Vue.js",
-    "Django",
-    "Flask",
-    "Ruby on Rails",
-    "Spring Boot",
-    "ASP.NET Core",
-    "Laravel",
-    "Express",
-    "Next.js",
-    "Nuxt.js",
-    "Gatsby",
-    "Ember.js",
-    "Svelte",
-    "Bootstrap",
-    "Tailwind CSS",
-    "Material-UI",
-    "Ant Design",
-    "FastAPI",
-    "GraphQL",
-    "Apollo",
-    "Redux",
-    "MobX",
-    "RxJS",
-    "Chakra UI",
-    "Semantic UI",
-    "Bulma",
-    "Foundation",
-    "Electron",
-    "Ionic",
-    "Cordova",
-    "Flutter",
-    "React Native",
-    "SwiftUI",
-    "Jetpack Compose",
-    "Qt",
-    "GTK",
-    "wxWidgets",
-    "Tkinter",
-    "Hadoop",
-    "Spark",
-    "Kafka",
-    "Flink",
-    "Airflow",
-  ];
-  const libraries = [
-    "jQuery",
-    "TensorFlow",
-    "PyTorch",
-    "Keras",
-    "Scikit-Learn",
-    "Pandas",
-    "NumPy",
-    "SciPy",
-    "Matplotlib",
-    "Seaborn",
-    "XGBoost",
-    "LightGBM",
-    "CatBoost",
-    "OpenCV",
-    "NLTK",
-    "SpaCy",
-    "Three.js",
-    "D3.js",
-    "Chart.js",
-    "Lodash",
-    "Moment.js",
-    "Socket.IO",
-    "Webpack",
-    "Babel",
-    "Gulp",
-    "Grunt",
-    "Parcel",
-    "Hadoop",
-    "Cassandra",
-    "MongoDB",
-    "Redis",
-    "PostgreSQL",
-    "MySQL",
-    "SQLite",
-    "MariaDB",
-    "Realm",
-    "CouchDB",
-    "Firebase",
-    "Supabase",
-    "Jest",
-    "Mocha",
-    "Chai",
-    "JUnit",
-    "PyTest",
-    "RSpec",
-    "Cypress",
-    "Selenium",
-    "QUnit",
-    "Enzyme",
-    "Ava",
-    "TestCafe",
-    "Karma",
-    "Jasmine",
-  ];
-  const roles = ["Admin", "Customer", "Developer", "Manager"];
 
   const handleTagsChange = (tags) => {
     console.log("Tags:", tags);
@@ -206,16 +62,21 @@ const Form = () => {
         </div>
         <div className="form-row">
           <div>
-            <Autocomplete
-              disablePortal
-              id="library"
-              options={libraries}
-              sx={{ width: 300 }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  {...register("library", { required: true })}
-                  label="library"
+            <Controller
+              name="Library"
+              control={control}
+              render={({ field }) => (
+                <Autocomplete
+                  {...field}
+                  multiple
+                  disablePortal
+                  id="library"
+                  options={libraries}
+                  sx={{ width: 300 }}
+                  onChange={(event, newValue) => field.onChange(newValue)}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Library" />
+                  )}
                 />
               )}
             />
@@ -238,8 +99,7 @@ const Form = () => {
         </div>
       </div>
 
-      <div className="form-group full-width">
-        <label htmlFor="tags">Tags</label>
+      <div>
         <TagsInput onChange={handleTagsChange} setValue={setValue} />
       </div>
 
@@ -255,7 +115,9 @@ const Form = () => {
         {errors.description && <p>This field is required</p>}
       </div>
 
-      <Button variant="contained" type="submit">Contained</Button>
+      <Button variant="contained" type="submit">
+        Submit
+      </Button>
     </form>
   );
 };

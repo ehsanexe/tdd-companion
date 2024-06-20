@@ -22,16 +22,6 @@
   width: 50%;
   padding: 0 2%;
 }
-.full-width {
-  width: 100% !important;
-  text-align: left;
-  flex-wrap: wrap;
-}
-
-.full-width label {
-  width: 100% !important;
-  text-align: left;
-}
 
 label {
   display: block;
