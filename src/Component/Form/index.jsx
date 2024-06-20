@@ -4,6 +4,8 @@ import "./index.css";
 import TagsInput from "../TagInput";
 import { Autocomplete, Button, TextField } from "@mui/material";
 import { frameworks, languages, libraries, roles } from "./const";
+import { getGeneratedResponse } from "../../api";
+import { CopyBlock, dracula } from "react-code-blocks";
 
 const Form = () => {
   const {
@@ -14,11 +16,11 @@ const Form = () => {
     control,
   } = useForm();
 
-  const [output, setOutput] = useState("");
+  const [output, setOutput] = useState({ code: "test", testCases: "test" });
 
-  const onSubmit = (data) => {
-    console.log({ data });
-    // setOutput
+  const onSubmit = async (data) => {
+    const res = await getGeneratedResponse(data);
+    setOutput(res);
   };
 
   const handleTagsChange = (tags) => {
@@ -26,99 +28,117 @@ const Form = () => {
   };
 
   return (
-    <form className="tech-form" onSubmit={handleSubmit(onSubmit)}>
-      <div className="dropdown-container">
-        <div className="form-row">
-          <div>
-            <Autocomplete
-              disablePortal
-              id="language"
-              options={languages}
-              sx={{ width: 300 }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  {...register("language", { required: true })}
-                  label="Language"
-                />
-              )}
-            />
+    <div className="form-container">
+      <form className="tech-form" onSubmit={handleSubmit(onSubmit)}>
+        <div className="dropdown-container">
+          <div className="form-row">
+            <div>
+              <Autocomplete
+                disablePortal
+                id="language"
+                options={languages}
+                sx={{ width: 300 }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    {...register("language", { required: true })}
+                    label="Language"
+                  />
+                )}
+              />
+            </div>
+            <div>
+              <Autocomplete
+                disablePortal
+                id="framework"
+                options={frameworks}
+                sx={{ width: 300 }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    {...register("framework", { required: true })}
+                    label="Framework"
+                  />
+                )}
+              />
+            </div>
           </div>
-          <div>
-            <Autocomplete
-              disablePortal
-              id="Framework"
-              options={frameworks}
-              sx={{ width: 300 }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  {...register("Framework", { required: true })}
-                  label="Framework"
-                />
-              )}
-            />
+          <div className="form-row">
+            <div>
+              <Controller
+                name="library"
+                control={control}
+                render={({ field }) => (
+                  <Autocomplete
+                    {...field}
+                    multiple
+                    disablePortal
+                    id="library"
+                    options={libraries}
+                    sx={{ width: 300 }}
+                    onChange={(event, newValue) => field.onChange(newValue)}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Library" />
+                    )}
+                  />
+                )}
+              />
+            </div>
+            <div>
+              <Autocomplete
+                disablePortal
+                id="role"
+                options={roles}
+                sx={{ width: 300 }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    {...register("role", { required: true })}
+                    label="Role"
+                  />
+                )}
+              />
+            </div>
           </div>
         </div>
-        <div className="form-row">
-          <div>
-            <Controller
-              name="Library"
-              control={control}
-              render={({ field }) => (
-                <Autocomplete
-                  {...field}
-                  multiple
-                  disablePortal
-                  id="library"
-                  options={libraries}
-                  sx={{ width: 300 }}
-                  onChange={(event, newValue) => field.onChange(newValue)}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Library" />
-                  )}
-                />
-              )}
-            />
-          </div>
-          <div>
-            <Autocomplete
-              disablePortal
-              id="Role"
-              options={roles}
-              sx={{ width: 300 }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  {...register("Role", { required: true })}
-                  label="Role"
-                />
-              )}
-            />
-          </div>
+
+        <div>
+          <TagsInput onChange={handleTagsChange} setValue={setValue} />
         </div>
-      </div>
 
-      <div>
-        <TagsInput onChange={handleTagsChange} setValue={setValue} />
-      </div>
+        <div>
+          <TextField
+            id="description"
+            label="Description"
+            multiline
+            rows={4}
+            sx={{ width: 600 }}
+            {...register("description", { required: true })}
+          />
+          {errors.description && <p>This field is required</p>}
+        </div>
 
+        <Button variant="contained" type="submit">
+          Submit
+        </Button>
+
+        {/* <p>{output}</p> */}
+      </form>
       <div>
-        <TextField
-          id="description"
-          label="Description"
-          multiline
-          rows={4}
-          sx={{ width: 600 }}
-          {...register("description", { required: true })}
+        <CopyBlock
+          text={output?.code}
+          showLineNumbers
+          wrapLines
+          theme={dracula}
         />
-        {errors.description && <p>This field is required</p>}
+        <CopyBlock
+          text={output?.testCases}
+          showLineNumbers
+          wrapLines
+          theme={dracula}
+        />
       </div>
-
-      <Button variant="contained" type="submit">
-        Submit
-      </Button>
-    </form>
+    </div>
   );
 };
 
