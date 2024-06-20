@@ -30,83 +30,75 @@ const Form = () => {
   return (
     <div className="form-container">
       <form className="tech-form" onSubmit={handleSubmit(onSubmit)}>
-        <div className="dropdown-container">
-          <div className="form-row">
-            <div>
-              <Autocomplete
-                disablePortal
-                id="language"
-                options={languages}
-                sx={{ width: 300 }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    {...register("language", { required: true })}
-                    label="Language"
-                  />
-                )}
+        <div>
+          <Autocomplete
+            disablePortal
+            id="language"
+            options={languages}
+            sx={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                {...register("language", { required: true })}
+                label="Language"
               />
-            </div>
-            <div>
-              <Autocomplete
-                disablePortal
-                id="framework"
-                options={frameworks}
-                sx={{ width: 300 }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    {...register("framework", { required: true })}
-                    label="Framework"
-                  />
-                )}
-              />
-            </div>
-          </div>
-          <div className="form-row">
-            <div>
-              <Controller
-                name="library"
-                control={control}
-                render={({ field }) => (
-                  <Autocomplete
-                    {...field}
-                    multiple
-                    disablePortal
-                    id="library"
-                    options={libraries}
-                    sx={{ width: 300 }}
-                    onChange={(event, newValue) => field.onChange(newValue)}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Library" />
-                    )}
-                  />
-                )}
-              />
-            </div>
-            <div>
-              <Autocomplete
-                disablePortal
-                id="role"
-                options={roles}
-                sx={{ width: 300 }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    {...register("role", { required: true })}
-                    label="Role"
-                  />
-                )}
-              />
-            </div>
-          </div>
+            )}
+          />
         </div>
-
+        <div>
+          <Autocomplete
+            disablePortal
+            id="framework"
+            options={frameworks}
+            sx={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                {...register("framework", { required: true })}
+                label="Framework"
+              />
+            )}
+          />
+        </div>
+        <div>
+          <Controller
+            name="library"
+            control={control}
+            render={({ field }) => (
+              <Autocomplete
+                {...field}
+                multiple
+                disablePortal
+                id="library"
+                options={libraries}
+                sx={{ width: 300 }}
+                onChange={(event, newValue) => field.onChange(newValue)}
+                renderInput={(params) => (
+                  <TextField {...params} label="Library" />
+                )}
+              />
+            )}
+          />
+        </div>
+        <div>
+          <Autocomplete
+            disablePortal
+            id="role"
+            options={roles}
+            sx={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                {...register("role", { required: true })}
+                label="Role"
+              />
+            )}
+          />
+        </div>
         <div>
           <TagsInput onChange={handleTagsChange} setValue={setValue} />
         </div>
-
-        <div>
+        <div className="description">
           <TextField
             id="description"
             label="Description"
@@ -121,22 +113,26 @@ const Form = () => {
         <Button variant="contained" type="submit">
           Submit
         </Button>
-
-        {/* <p>{output}</p> */}
       </form>
-      <div>
-        <CopyBlock
-          text={output?.code}
-          showLineNumbers
-          wrapLines
-          theme={dracula}
-        />
-        <CopyBlock
-          text={output?.testCases}
-          showLineNumbers
-          wrapLines
-          theme={dracula}
-        />
+      <div className="code-block">
+        <div>
+          <p>Code:</p>
+          <CopyBlock
+            text={output?.code}
+            showLineNumbers
+            wrapLines
+            theme={dracula}
+          />
+        </div>
+        <div>
+          <p>Test Cases:</p>
+          <CopyBlock
+            text={output?.testCases}
+            showLineNumbers
+            wrapLines
+            theme={dracula}
+          />
+        </div>
       </div>
     </div>
   );
