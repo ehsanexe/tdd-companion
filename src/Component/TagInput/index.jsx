@@ -33,6 +33,7 @@ const TagsInput = ({ onChange, setValue }) => {
         onChange={(e) => setInput(e.target.value)} // Update input value
         onKeyDown={handleKeyDown}
         sx={{ width: 300 }}
+        label="Tags"
       />
       <div className="tags-container">
         {tags.map((tag, index) => (
