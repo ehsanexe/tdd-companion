@@ -28,3 +28,12 @@
   overflow: auto;
   max-height: 30rem;
 }
+
+.drawer {
+  display: flex;
+  flex-direction: column;
+  background: #0f171f;
+  height: 100%;
+  gap: 1rem;
+  padding: 1rem;
+}
