@@ -1,7 +1,14 @@
-import { Button, CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import {
+  Button,
+  CssBaseline,
+  IconButton,
+  ThemeProvider,
+  createTheme,
+} from "@mui/material";
 import "./App.css";
 import Form from "./Component/Form";
 import { useState } from "react";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 const darkTheme = createTheme({
   palette: {
@@ -16,7 +23,9 @@ function App() {
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <div className="App">
-        <Button onClick={() => setIsDrawer(true)}>Setting</Button>
+        <IconButton onClick={() => setIsDrawer(true)} aria-label="Setting">
+          <SettingsIcon />
+        </IconButton>
         <h1>TDD Companion Form</h1>
         <Form isDrawer={isDrawer} setIsDrawer={setIsDrawer} />
       </div>
