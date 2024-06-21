@@ -11,10 +11,10 @@ const model = genAI.getGenerativeModel({
 });
 
 export const getGeneratedResponse = async (data) => {
-  const { description, language, framework, library, role } = data;
+  const { description, language, framework, library } = data;
 
   const prompt = `write code of test cases for the user story and provide initial skeleton of code using Test Driven Development (TDD)
-  user story: ${description}, language: ${language}, framework: ${framework}, libraries: ${library}, user role: ${role}`;
+  user story: ${description}, language: ${language}, framework: ${framework}, libraries: ${library}`;
   console.log({ prompt });
   // return;
   const result = await model.generateContent(prompt);

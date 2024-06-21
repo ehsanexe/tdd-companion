@@ -15,6 +15,7 @@ const Form = () => {
     handleSubmit,
     formState: { errors },
     control,
+    getValues,
   } = useForm();
 
   const [output, setOutput] = useState({ code: "test", testCases: "test" });
@@ -86,21 +87,6 @@ const Form = () => {
           />
         </div>
         <div>
-          <Autocomplete
-            disablePortal
-            id="role"
-            options={roles}
-            sx={{ width: 300 }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                {...register("role", { required: true })}
-                label="Role"
-              />
-            )}
-          />
-        </div>
-        <div>
           <TagsInput onChange={handleTagsChange} setValue={setValue} />
         </div>
         <div className="description">
@@ -127,6 +113,7 @@ const Form = () => {
             showLineNumbers
             wrapLines
             theme={dracula}
+            language={getValues("language")}
           />
         </div>
         <div>
@@ -136,6 +123,7 @@ const Form = () => {
             showLineNumbers
             wrapLines
             theme={dracula}
+            language={getValues("language")}
           />
         </div>
       </div>
