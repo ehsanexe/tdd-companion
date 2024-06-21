@@ -3,6 +3,12 @@ h1 {
   text-align: center;
 }
 
+.settings {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 10px;
@@ -11,7 +17,7 @@ h1 {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #121212; 
+  background: #121212;
 }
 
 /* Handle */

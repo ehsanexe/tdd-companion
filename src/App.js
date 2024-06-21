@@ -23,9 +23,11 @@ function App() {
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <div className="App">
-        <IconButton onClick={() => setIsDrawer(true)} aria-label="Setting">
-          <SettingsIcon />
-        </IconButton>
+        <div className="settings">
+          <IconButton onClick={() => setIsDrawer(true)} aria-label="Setting">
+            <SettingsIcon />
+          </IconButton>
+        </div>
         <h1>TDD Companion Form</h1>
         <Form isDrawer={isDrawer} setIsDrawer={setIsDrawer} />
       </div>
