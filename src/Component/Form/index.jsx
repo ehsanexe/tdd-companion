@@ -6,6 +6,7 @@ import { Autocomplete, Button, TextField } from "@mui/material";
 import { frameworks, languages, libraries, roles } from "./const";
 import { getGeneratedResponse } from "../../api";
 import { CopyBlock, dracula } from "react-code-blocks";
+import Loader from "../Loader";
 
 const Form = () => {
   const {
@@ -17,10 +18,13 @@ const Form = () => {
   } = useForm();
 
   const [output, setOutput] = useState({ code: "test", testCases: "test" });
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data) => {
+    setIsLoading(true);
     const res = await getGeneratedResponse(data);
     setOutput(res);
+    setIsLoading(false);
   };
 
   const handleTagsChange = (tags) => {
@@ -29,6 +33,7 @@ const Form = () => {
 
   return (
     <div className="form-container">
+      <Loader isLoading={isLoading} />
       <form className="tech-form" onSubmit={handleSubmit(onSubmit)}>
         <div>
           <Autocomplete
