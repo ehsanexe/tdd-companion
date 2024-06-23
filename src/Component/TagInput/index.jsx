@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import "./index.css";
 import { Chip, TextField } from "@mui/material";
 
-const TagsInput = ({ onChange, setValue }) => {
-  const [tags, setTags] = useState([]);
+const TagsInput = ({ onChange, setValue, tags, setTags }) => {
   const [input, setInput] = useState("");
 
   const handleKeyDown = (e) => {
@@ -24,6 +23,7 @@ const TagsInput = ({ onChange, setValue }) => {
     newTags.splice(index, 1);
     setTags(newTags);
     onChange(newTags);
+    setValue("tags", newTags);
   };
 
   return (

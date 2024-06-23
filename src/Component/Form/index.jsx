@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import "./index.css";
 import TagsInput from "../TagInput";
@@ -13,10 +13,14 @@ const Form = ({ isDrawer, setIsDrawer }) => {
     register,
     setValue,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, defaultValues },
     control,
     getValues,
   } = useForm();
+
+  const [tags, setTags] = useState([]);
+  const values = getValues();
+  const store = localStorage.getItem("store");
 
   const [output, setOutput] = useState({ code: "test", testCases: "test" });
   const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +36,32 @@ const Form = ({ isDrawer, setIsDrawer }) => {
     console.log("Tags:", tags);
   };
 
+  useEffect(() => {
+    if (store) {
+      const parseStore = JSON.parse(store);
+      setValue("framework", parseStore.framework);
+      setValue("language", parseStore.language);
+      setValue("library", parseStore.library);
+      setValue("tags", parseStore.tags);
+      setTags(parseStore.tags);
+    }
+  }, []);
+
+  useEffect(() => {
+    const isSettingsEmpty =
+      !values?.framework &&
+      !values?.language &&
+      !values?.library?.length &&
+      !values?.tags?.length;
+
+    if (isSettingsEmpty && !store) {
+      setIsDrawer(true);
+    } else {
+      console.log({ values });
+      localStorage.setItem("store", JSON.stringify(values));
+    }
+  }, [values]);
+
   return (
     <div className="form-container">
       <Loader isLoading={isLoading} />
@@ -44,6 +74,7 @@ const Form = ({ isDrawer, setIsDrawer }) => {
                 id="framework"
                 options={frameworks}
                 sx={{ width: 300 }}
+                value={getValues("framework")}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -59,6 +90,7 @@ const Form = ({ isDrawer, setIsDrawer }) => {
                 id="language"
                 options={languages}
                 sx={{ width: 300 }}
+                value={getValues("language")}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -90,7 +122,12 @@ const Form = ({ isDrawer, setIsDrawer }) => {
               />
             </div>
             <div>
-              <TagsInput onChange={handleTagsChange} setValue={setValue} />
+              <TagsInput
+                tags={tags}
+                setTags={setTags}
+                onChange={handleTagsChange}
+                setValue={setValue}
+              />
             </div>
           </div>
         </Drawer>
