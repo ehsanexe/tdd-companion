@@ -25,9 +25,27 @@ const Form = ({ isDrawer, setIsDrawer }) => {
   const [output, setOutput] = useState({ code: "test", testCases: "test" });
   const [isLoading, setIsLoading] = useState(false);
 
+  const downloadFile = async (fileContent, fileName) => {
+    const blob = new Blob([fileContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;  // Replace 'filename.txt' with your desired file name
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);  // Clean up the URL object
+  };
+
+
+
   const onSubmit = async (data) => {
     setIsLoading(true);
+
     const res = await getGeneratedResponse(data);
+    await downloadFile(res.code, 'code.txt');
+    await downloadFile(res.testCases, 'testCase.txt');
+
     setOutput(res);
     setIsLoading(false);
   };
