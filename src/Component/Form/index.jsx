@@ -43,7 +43,7 @@ const Form = ({ isDrawer, setIsDrawer }) => {
       setValue("language", parseStore.language);
       setValue("library", parseStore.library);
       setValue("tags", parseStore.tags);
-      setTags(parseStore.tags);
+      setTags(parseStore.tags ?? []);
     }
   }, []);
 
