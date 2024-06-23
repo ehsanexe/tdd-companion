@@ -16,13 +16,40 @@ const Form = () => {
     control,
   } = useForm();
 
+  const [file, setFile] = useState(null);
   const [output, setOutput] = useState({ code: "test", testCases: "test" });
 
-  const onSubmit = async (data) => {
-    const res = await getGeneratedResponse(data);
-    setOutput(res);
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
   };
 
+  const downloadFile = async (fileContent, fileName) => {
+    const blob = new Blob([fileContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;  // Replace 'filename.txt' with your desired file name
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);  // Clean up the URL object
+  };
+
+  const onSubmit = async (data) => {
+    if (!file) {
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const base64String = reader.result.split(',')[1];
+      const res = await getGeneratedResponse({data, image: base64String});
+      await downloadFile(res.code, 'code.txt');
+      await downloadFile(res.testCases, 'testCase.txt');
+      setOutput(res);
+      };
+    reader.readAsDataURL(file);
+  };
   const handleTagsChange = (tags) => {
     console.log("Tags:", tags);
   };
@@ -97,6 +124,16 @@ const Form = () => {
         </div>
         <div>
           <TagsInput onChange={handleTagsChange} setValue={setValue} />
+        </div>
+        <div>
+          <Button
+            component="label"
+            variant="contained"
+            // startIcon={<CloudUploadIcon />}
+          >
+            Upload file
+            <input style={{display: 'none'}} type="file" onChange={handleFileChange} />
+          </Button>
         </div>
         <div className="description">
           <TextField
