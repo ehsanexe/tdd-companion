@@ -30,5 +30,47 @@ tags: ${tags}`;
 
   const jsonResponse = JSON.parse(format);
 
-  return jsonResponse;
+  const history = [
+    {
+      role: "user",
+      parts: [{ text: prompt }],
+    },
+    {
+      role: "model",
+      parts: [{ text: text }],
+    },
+  ];
+
+  return { jsonResponse, history };
+};
+
+export const sendFeedBack = async (history, prompt) => {
+  console.log({ history, prompt });
+  const chat = model.startChat({
+    history,
+  });
+
+  const result = await chat.sendMessage(prompt);
+  const response = await result.response;
+
+  const text = response.text();
+
+  let format = text.replace(/```/g, "");
+  format = format.replaceAll("json", "");
+
+  const jsonResponse = JSON.parse(format);
+
+  let updatedHistory = [
+    ...history,
+    {
+      role: "user",
+      parts: [{ text: prompt }],
+    },
+    {
+      role: "model",
+      parts: [{ text: text }],
+    },
+  ];
+
+  return { jsonResponse, updatedHistory };
 };

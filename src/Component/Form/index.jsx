@@ -4,7 +4,7 @@ import "./index.css";
 import TagsInput from "../TagInput";
 import { Autocomplete, Button, Drawer, TextField } from "@mui/material";
 import { frameworks, languages, libraries, roles } from "./const";
-import { getGeneratedResponse } from "../../api";
+import { getGeneratedResponse, sendFeedBack } from "../../api";
 import { CopyBlock, dracula } from "react-code-blocks";
 import Loader from "../Loader";
 
@@ -21,9 +21,15 @@ const Form = ({ isDrawer, setIsDrawer }) => {
   const [tags, setTags] = useState([]);
   const values = getValues();
   const store = localStorage.getItem("store");
+  const [isFeedBack, setIsFeedBack] = useState(false);
+  const [feedback, setFeedback] = useState("");
 
-  const [output, setOutput] = useState({ code: "//initial skeleton of the implementation... \n\n", testCases: "//test cases based on the provided user story... \n\n" });
+  const [output, setOutput] = useState({
+    code: "//initial skeleton of the implementation... \n\n",
+    testCases: "//test cases based on the provided user story... \n\n",
+  });
   const [isLoading, setIsLoading] = useState(false);
+  const [chatHistory, setChatHistory] = useState();
 
   const downloadFile = async (fileContent, fileName) => {
     const blob = new Blob([fileContent], { type: "text/plain" });
@@ -44,8 +50,19 @@ const Form = ({ isDrawer, setIsDrawer }) => {
     await downloadFile(res.code, "code.txt");
     await downloadFile(res.testCases, "testCase.txt");
 
-    setOutput(res);
+    setOutput(res.jsonResponse);
     setIsLoading(false);
+    setIsFeedBack(true);
+    setChatHistory(res.history);
+  };
+
+  const onFeedback = async () => {
+    setIsLoading(true);
+    const res = await sendFeedBack(chatHistory, feedback);
+
+    setOutput(res.jsonResponse);
+    setIsLoading(false);
+    setChatHistory(res.updatedHistory);
   };
 
   const handleTagsChange = (tags) => {
@@ -198,6 +215,22 @@ const Form = ({ isDrawer, setIsDrawer }) => {
           />
         </div>
       </div>
+      {isFeedBack && (
+        <div>
+          <TextField
+            id="feedback"
+            label="Feedback"
+            multiline
+            rows={4}
+            sx={{ width: "100%" }}
+            value={feedback}
+            onChange={(e) => setFeedback(e.target.value)}
+          />
+          <Button variant="contained" onClick={onFeedback}>
+            Submit
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
