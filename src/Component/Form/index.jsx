@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import "./index.css";
 import TagsInput from "../TagInput";
 import { Autocomplete, Button, Drawer, TextField } from "@mui/material";
-import { frameworks, languages, libraries, roles } from "./const";
+import { frameworks, libraries } from "./const";
 import { getGeneratedResponse, sendFeedBack } from "../../api";
 import { CopyBlock, dracula } from "react-code-blocks";
 import Loader from "../Loader";
@@ -13,7 +13,7 @@ const Form = ({ isDrawer, setIsDrawer }) => {
     register,
     setValue,
     handleSubmit,
-    formState: { errors, defaultValues },
+    formState: { errors },
     control,
     getValues,
   } = useForm();
@@ -30,6 +30,17 @@ const Form = ({ isDrawer, setIsDrawer }) => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [chatHistory, setChatHistory] = useState();
+
+  const [selectedFramework, setSelectedFramework] = useState(null);
+
+  
+  const handleFrameworkChange = (event, value) => {
+    setSelectedFramework(value);
+    console.log('value', value)
+    if (value) {
+      setValue("language", value.languages[0].name);
+    }
+  };
 
   const downloadFile = async (fileContent, fileName) => {
     const blob = new Blob([fileContent], { type: "text/plain" });
@@ -72,6 +83,10 @@ const Form = ({ isDrawer, setIsDrawer }) => {
   useEffect(() => {
     if (store) {
       const parseStore = JSON.parse(store);
+      const storedFramework = frameworks.find(f => f.label === parseStore.framework);
+      setValue("framework", storedFramework ?? null);
+      setSelectedFramework(storedFramework ?? null);
+
       setValue("framework", parseStore.framework);
       setValue("language", parseStore.language);
       setValue("library", parseStore.library);
@@ -101,28 +116,57 @@ const Form = ({ isDrawer, setIsDrawer }) => {
     }
   }, [values]);
 
+  const frameworkOptions = useMemo(() =>
+    frameworks.map((data) => data.label), []);
+
+  const languageOptions = useMemo(() => {
+    const allLanguages = frameworks.reduce((acc, framework) => {
+      framework.languages.forEach(lang => {
+        if (!acc.includes(lang.name)) {
+          acc.push(lang.name);
+        }
+      });
+      return acc;
+    }, []);
+    return selectedFramework ? selectedFramework?.languages.map(lang => lang.name) : allLanguages;
+  }, [selectedFramework]);
+
   return (
     <div className="form-container">
       <Loader isLoading={isLoading} />
       <form className="tech-form" onSubmit={handleSubmit(onSubmit)}>
-        <Drawer open={isDrawer} onClose={() => setIsDrawer(false)}>
+        <Drawer
+          ModalProps={{
+            keepMounted: true
+          }} open={isDrawer} onClose={() => setIsDrawer(false)}>
           <div className="drawer">
             <div>
               <Controller
                 name="framework"
                 control={control}
+                defaultValue={null}
                 render={({ field }) => (
                   <Autocomplete
-                    {...field}
-                    disablePortal
-                    id="framework"
-                    options={frameworks}
-                    sx={{ width: 300 }}
-                    onChange={(event, newValue) => field.onChange(newValue)}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Framework" />
-                    )}
-                  />
+                  {...field}
+                  disablePortal
+                  id="framework"
+                  options={frameworkOptions}
+                  getOptionLabel={(option) => option}
+                  sx={{ width: 300 }}
+                  onChange={(event, value) => {
+                    const selected = frameworks.find(f => f.label === value);
+                    console.log('selected', selected)
+                    field.onChange(selected?.label ?? '');
+                    handleFrameworkChange(event, selected);
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      {...register("framework", { required: true })}
+                      label="Framework"
+                    />
+                  )}
+                />
                 )}
               />
             </div>
@@ -130,18 +174,26 @@ const Form = ({ isDrawer, setIsDrawer }) => {
               <Controller
                 name="language"
                 control={control}
+                defaultValue=""
                 render={({ field }) => (
                   <Autocomplete
-                    {...field}
-                    disablePortal
-                    id="language"
-                    options={languages}
-                    sx={{ width: 300 }}
-                    onChange={(event, newValue) => field.onChange(newValue)}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Language" />
-                    )}
-                  />
+                  {...field}
+                  disablePortal
+                  id="language"
+                  options={languageOptions}
+                  sx={{ width: 300 }}
+                  isOptionEqualToValue={(option, value) => option === value}
+                  onChange={(event, value) => {
+                    field.onChange(value)
+                  }}
+                  renderInput={(params) => (
+                    < TextField
+                      {...params}
+                      {...register("language", { required: true })}
+                      label="Language"
+                    />
+                  )}
+                />
                 )}
               />
             </div>
