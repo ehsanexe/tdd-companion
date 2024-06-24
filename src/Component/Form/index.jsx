@@ -163,10 +163,10 @@ const Form = ({ isDrawer, setIsDrawer }) => {
         <div className="description">
           <TextField
             id="description"
-            label="Description"
+            label="Userstory / Description"
             multiline
             rows={4}
-            sx={{ width: 600 }}
+            sx={{ width: "100%" }}
             {...register("description", { required: true })}
           />
           {errors.description && <p>This field is required</p>}
@@ -177,20 +177,20 @@ const Form = ({ isDrawer, setIsDrawer }) => {
         </Button>
       </form>
       <div className="code-block">
-        <div>
-          <p>Code:</p>
+        <div className="block">
+          <p>Test Cases:</p>
           <CopyBlock
-            text={output?.code}
+            text={output?.testCases}
             showLineNumbers
             wrapLines
             theme={dracula}
             language={getValues("language")}
           />
         </div>
-        <div>
-          <p>Test Cases:</p>
+        <div className="block">
+          <p>Code:</p>
           <CopyBlock
-            text={output?.testCases}
+            text={output?.code}
             showLineNumbers
             wrapLines
             theme={dracula}

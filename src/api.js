@@ -7,24 +7,28 @@ const genAI = new GoogleGenerativeAI(API_KEY);
 const model = genAI.getGenerativeModel({
   model: "gemini-1.5-flash",
   systemInstruction:
-    "provide output in valid json format, example output: {testCases: string, code: string}. Don't give an explanation of it, just provide json object.",
+    "provide output in valid json format, example output: {testCases: string, code: string}. Do not include any explanations; just provide the JSON object.",
 });
 
 export const getGeneratedResponse = async (data) => {
-  const { description, language, framework, library } = data;
+  const { description, language, framework, library, tags } = data;
 
-  const prompt = `write code of test cases for the user story and provide initial skeleton of code using Test Driven Development (TDD)
-  user story: ${description}, language: ${language}, framework: ${framework}, libraries: ${library}`;
-  console.log({ prompt });
+  const prompt = `Write code for test cases based on the provided user story and generate the initial skeleton of the implementation using Test Driven Development (TDD). Use the specified language, framework, and libraries. Also, include these tags in your implementation.
+user story: ${description}
+language: ${language}
+framework: ${framework}
+libraries: ${library}
+tags: ${tags}`;
+
   // return;
   const result = await model.generateContent(prompt);
   const response = await result.response;
   const text = response.text();
-  
-  let format = text.replace(/```/g,"")
-  format = format.replaceAll("json","");
 
-  const jsonResponse = JSON.parse(format)
+  let format = text.replace(/```/g, "");
+  format = format.replaceAll("json", "");
+
+  const jsonResponse = JSON.parse(format);
 
   return jsonResponse;
 };
