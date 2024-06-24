@@ -57,8 +57,14 @@ const Form = ({ isDrawer, setIsDrawer }) => {
   const onSubmit = async (data) => {
     setIsLoading(true);
 
-    const res = await getGeneratedResponse(data);
-    await downloadFile(res.code, "code.txt");
+    const res = await getGeneratedResponse(data)
+
+    const selectedFramework = frameworks.find(f => f.label === data.framework);
+    const selectedLanguage = selectedFramework?.languages.find(l => l.name === data.language);
+    const fileExtension = selectedLanguage?.extension || 'txt'; // Default to 'txt' if not found
+    console.log('fileExtension', fileExtension)
+    await downloadFile(res.code, `code.${fileExtension}`);
+
     await downloadFile(res.testCases, "testCase.txt");
 
     setOutput(res.jsonResponse);
