@@ -22,7 +22,7 @@ const Form = ({ isDrawer, setIsDrawer }) => {
   const values = getValues();
   const store = localStorage.getItem("store");
 
-  const [output, setOutput] = useState({ code: "test", testCases: "test" });
+  const [output, setOutput] = useState({ code: "//initial skeleton of the implementation... \n\n", testCases: "//test cases based on the provided user story... \n\n" });
   const [isLoading, setIsLoading] = useState(false);
 
   const downloadFile = async (fileContent, fileName) => {
