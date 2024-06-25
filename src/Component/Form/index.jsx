@@ -8,6 +8,7 @@ import { getGeneratedResponse, sendFeedBack } from "../../api";
 import { CopyBlock, dracula } from "react-code-blocks";
 import Loader from "../Loader";
 import ChatHistory from "../History";
+import { Download, Science, Code } from "@mui/icons-material/";
 
 const Form = ({ isDrawer, setIsDrawer, isHistory, setIsHistory }) => {
   const {
@@ -256,6 +257,22 @@ const Form = ({ isDrawer, setIsDrawer, isHistory, setIsHistory }) => {
           Submit
         </Button>
       </form>
+
+      {isFeedBack && (
+        <div className="downloads">
+          <span>Downalods:</span>
+          <Button variant="outlined" startIcon={<Code />}>
+            Code
+          </Button>
+          <Button variant="outlined" startIcon={<Science />}>
+            Tests
+          </Button>
+          <Button variant="outlined" startIcon={<Download />}>
+            Code + Tests
+          </Button>
+        </div>
+      )}
+
       <div className="code-block">
         <div className="block">
           <p>Test Cases:</p>

@@ -15,6 +15,12 @@
   border-radius: 0.4rem;
 }
 
+.downloads {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
 .code-block {
   display: flex;
   flex-direction: column;
