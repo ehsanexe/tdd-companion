@@ -5,7 +5,7 @@ import TagsInput from "../TagInput";
 import { Autocomplete, Button, Drawer, TextField } from "@mui/material";
 import { frameworks, libraries } from "./const";
 import { getGeneratedResponse, sendFeedBack } from "../../api";
-import { CopyBlock, dracula } from "react-code-blocks";
+import { CopyBlock, vs2015 } from "react-code-blocks";
 import Loader from "../Loader";
 import ChatHistory from "../History";
 import { Download, Science, Code } from "@mui/icons-material/";
@@ -57,8 +57,7 @@ const Form = ({ isDrawer, setIsDrawer, isHistory, setIsHistory }) => {
 
   const onSubmit = async (data) => {
     setIsLoading(true);
-    const res = await getGeneratedResponse(data)
-
+    const res = await getGeneratedResponse(data);
 
     setOutput(res.jsonResponse);
     setIsLoading(false);
@@ -67,20 +66,24 @@ const Form = ({ isDrawer, setIsDrawer, isHistory, setIsHistory }) => {
   };
   const handleTestDownload = async () => {
     await downloadFile(output.testCases, "testCase.txt");
-  }
+  };
   const handleCodeDownload = async () => {
-    const selectedFramework = frameworks.find(f => f.label === getValues('framework'));
-    const selectedLanguage = selectedFramework?.languages.find(l => l.name === getValues('language'));
-    const fileExtension = selectedLanguage?.extension || 'txt'; // Default to 'txt' if not found
+    const selectedFramework = frameworks.find(
+      (f) => f.label === getValues("framework")
+    );
+    const selectedLanguage = selectedFramework?.languages.find(
+      (l) => l.name === getValues("language")
+    );
+    const fileExtension = selectedLanguage?.extension || "txt"; // Default to 'txt' if not found
     await downloadFile(output.code, `code.${fileExtension}`);
-  }
+  };
   const handleAllDownload = async () => {
-    await handleTestDownload()
-    await handleCodeDownload()
-  }
+    await handleTestDownload();
+    await handleCodeDownload();
+  };
 
   const onFeedback = async () => {
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
     setIsLoading(true);
     const res = await sendFeedBack(chatHistory, feedback);
 
@@ -273,13 +276,25 @@ const Form = ({ isDrawer, setIsDrawer, isHistory, setIsHistory }) => {
       {isFeedBack && (
         <div className="downloads">
           <span>Downalods:</span>
-          <Button variant="outlined" startIcon={<Code />} onClick={handleCodeDownload}>
+          <Button
+            variant="outlined"
+            startIcon={<Code />}
+            onClick={handleCodeDownload}
+          >
             Code
           </Button>
-          <Button variant="outlined" startIcon={<Science />} onClick={handleTestDownload}>
+          <Button
+            variant="outlined"
+            startIcon={<Science />}
+            onClick={handleTestDownload}
+          >
             Tests
           </Button>
-          <Button variant="outlined" startIcon={<Download />} onClick={handleAllDownload}>
+          <Button
+            variant="outlined"
+            startIcon={<Download />}
+            onClick={handleAllDownload}
+          >
             Code + Tests
           </Button>
         </div>
@@ -292,7 +307,7 @@ const Form = ({ isDrawer, setIsDrawer, isHistory, setIsHistory }) => {
             text={output?.testCases}
             showLineNumbers
             wrapLines
-            theme={dracula}
+            theme={vs2015}
             language={getValues("language")}
           />
         </div>
@@ -302,7 +317,7 @@ const Form = ({ isDrawer, setIsDrawer, isHistory, setIsHistory }) => {
             text={output?.code}
             showLineNumbers
             wrapLines
-            theme={dracula}
+            theme={vs2015}
             language={getValues("language")}
           />
         </div>
