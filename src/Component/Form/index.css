@@ -31,3 +31,12 @@
   gap: 1rem;
   padding: 1rem;
 }
+
+.history-drawer {
+  max-height: 30rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background-color: #0f171f;
+}

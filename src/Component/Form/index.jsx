@@ -7,8 +7,9 @@ import { frameworks, libraries } from "./const";
 import { getGeneratedResponse, sendFeedBack } from "../../api";
 import { CopyBlock, dracula } from "react-code-blocks";
 import Loader from "../Loader";
+import ChatHistory from "../History";
 
-const Form = ({ isDrawer, setIsDrawer }) => {
+const Form = ({ isDrawer, setIsDrawer, isHistory, setIsHistory }) => {
   const {
     register,
     setValue,
@@ -29,14 +30,13 @@ const Form = ({ isDrawer, setIsDrawer }) => {
     testCases: "//test cases based on the provided user story... \n\n",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [chatHistory, setChatHistory] = useState();
+  const [chatHistory, setChatHistory] = useState([]);
 
   const [selectedFramework, setSelectedFramework] = useState(null);
 
-  
   const handleFrameworkChange = (event, value) => {
     setSelectedFramework(value);
-    console.log('value', value)
+    console.log("value", value);
     if (value) {
       setValue("language", value.languages[0].name);
     }
@@ -83,7 +83,9 @@ const Form = ({ isDrawer, setIsDrawer }) => {
   useEffect(() => {
     if (store) {
       const parseStore = JSON.parse(store);
-      const storedFramework = frameworks.find(f => f.label === parseStore.framework);
+      const storedFramework = frameworks.find(
+        (f) => f.label === parseStore.framework
+      );
       setValue("framework", storedFramework ?? null);
       setSelectedFramework(storedFramework ?? null);
 
@@ -116,19 +118,23 @@ const Form = ({ isDrawer, setIsDrawer }) => {
     }
   }, [values]);
 
-  const frameworkOptions = useMemo(() =>
-    frameworks.map((data) => data.label), []);
+  const frameworkOptions = useMemo(
+    () => frameworks.map((data) => data.label),
+    []
+  );
 
   const languageOptions = useMemo(() => {
     const allLanguages = frameworks.reduce((acc, framework) => {
-      framework.languages.forEach(lang => {
+      framework.languages.forEach((lang) => {
         if (!acc.includes(lang.name)) {
           acc.push(lang.name);
         }
       });
       return acc;
     }, []);
-    return selectedFramework ? selectedFramework?.languages.map(lang => lang.name) : allLanguages;
+    return selectedFramework
+      ? selectedFramework?.languages.map((lang) => lang.name)
+      : allLanguages;
   }, [selectedFramework]);
 
   return (
@@ -137,8 +143,11 @@ const Form = ({ isDrawer, setIsDrawer }) => {
       <form className="tech-form" onSubmit={handleSubmit(onSubmit)}>
         <Drawer
           ModalProps={{
-            keepMounted: true
-          }} open={isDrawer} onClose={() => setIsDrawer(false)}>
+            keepMounted: true,
+          }}
+          open={isDrawer}
+          onClose={() => setIsDrawer(false)}
+        >
           <div className="drawer">
             <div>
               <Controller
@@ -147,26 +156,28 @@ const Form = ({ isDrawer, setIsDrawer }) => {
                 defaultValue={null}
                 render={({ field }) => (
                   <Autocomplete
-                  {...field}
-                  disablePortal
-                  id="framework"
-                  options={frameworkOptions}
-                  getOptionLabel={(option) => option}
-                  sx={{ width: 300 }}
-                  onChange={(event, value) => {
-                    const selected = frameworks.find(f => f.label === value);
-                    console.log('selected', selected)
-                    field.onChange(selected?.label ?? '');
-                    handleFrameworkChange(event, selected);
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      {...register("framework", { required: true })}
-                      label="Framework"
-                    />
-                  )}
-                />
+                    {...field}
+                    disablePortal
+                    id="framework"
+                    options={frameworkOptions}
+                    getOptionLabel={(option) => option}
+                    sx={{ width: 300 }}
+                    onChange={(event, value) => {
+                      const selected = frameworks.find(
+                        (f) => f.label === value
+                      );
+                      console.log("selected", selected);
+                      field.onChange(selected?.label ?? "");
+                      handleFrameworkChange(event, selected);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        {...register("framework", { required: true })}
+                        label="Framework"
+                      />
+                    )}
+                  />
                 )}
               />
             </div>
@@ -177,23 +188,23 @@ const Form = ({ isDrawer, setIsDrawer }) => {
                 defaultValue=""
                 render={({ field }) => (
                   <Autocomplete
-                  {...field}
-                  disablePortal
-                  id="language"
-                  options={languageOptions}
-                  sx={{ width: 300 }}
-                  isOptionEqualToValue={(option, value) => option === value}
-                  onChange={(event, value) => {
-                    field.onChange(value)
-                  }}
-                  renderInput={(params) => (
-                    < TextField
-                      {...params}
-                      {...register("language", { required: true })}
-                      label="Language"
-                    />
-                  )}
-                />
+                    {...field}
+                    disablePortal
+                    id="language"
+                    options={languageOptions}
+                    sx={{ width: 300 }}
+                    isOptionEqualToValue={(option, value) => option === value}
+                    onChange={(event, value) => {
+                      field.onChange(value);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        {...register("language", { required: true })}
+                        label="Language"
+                      />
+                    )}
+                  />
                 )}
               />
             </div>
@@ -283,6 +294,17 @@ const Form = ({ isDrawer, setIsDrawer }) => {
           </Button>
         </div>
       )}
+      <Drawer
+        anchor={"bottom"}
+        open={isHistory && chatHistory.length}
+        onClose={() => setIsHistory(false)}
+      >
+        <div className="history-drawer">
+          {chatHistory.map((item) => (
+            <ChatHistory role={item.role} response={item?.parts[0]?.text} />
+          ))}
+        </div>
+      </Drawer>
     </div>
   );
 };
