@@ -57,22 +57,27 @@ const Form = ({ isDrawer, setIsDrawer, isHistory, setIsHistory }) => {
 
   const onSubmit = async (data) => {
     setIsLoading(true);
-
     const res = await getGeneratedResponse(data)
 
-    const selectedFramework = frameworks.find(f => f.label === data.framework);
-    const selectedLanguage = selectedFramework?.languages.find(l => l.name === data.language);
-    const fileExtension = selectedLanguage?.extension || 'txt'; // Default to 'txt' if not found
-    console.log('fileExtension', fileExtension)
-    await downloadFile(res.code, `code.${fileExtension}`);
-
-    await downloadFile(res.testCases, "testCase.txt");
 
     setOutput(res.jsonResponse);
     setIsLoading(false);
     setIsFeedBack(true);
     setChatHistory(res.history);
   };
+  const handleTestDownload = async () => {
+    await downloadFile(output.testCases, "testCase.txt");
+  }
+  const handleCodeDownload = async () => {
+    const selectedFramework = frameworks.find(f => f.label === getValues('framework'));
+    const selectedLanguage = selectedFramework?.languages.find(l => l.name === getValues('language'));
+    const fileExtension = selectedLanguage?.extension || 'txt'; // Default to 'txt' if not found
+    await downloadFile(output.code, `code.${fileExtension}`);
+  }
+  const handleAllDownload = async () => {
+    await handleTestDownload()
+    await handleCodeDownload()
+  }
 
   const onFeedback = async () => {
     setIsLoading(true);
@@ -267,13 +272,13 @@ const Form = ({ isDrawer, setIsDrawer, isHistory, setIsHistory }) => {
       {isFeedBack && (
         <div className="downloads">
           <span>Downalods:</span>
-          <Button variant="outlined" startIcon={<Code />}>
+          <Button variant="outlined" startIcon={<Code />} onClick={handleCodeDownload}>
             Code
           </Button>
-          <Button variant="outlined" startIcon={<Science />}>
+          <Button variant="outlined" startIcon={<Science />} onClick={handleTestDownload}>
             Tests
           </Button>
-          <Button variant="outlined" startIcon={<Download />}>
+          <Button variant="outlined" startIcon={<Download />} onClick={handleAllDownload}>
             Code + Tests
           </Button>
         </div>
