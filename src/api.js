@@ -18,7 +18,9 @@ user story: ${description}
 language: ${language}
 framework: ${framework}
 libraries: ${library}
-tags: ${tags}`;
+tags: ${tags}
+provide Model where applicable
+`;
 
   // return;
   const result = await model.generateContent(prompt);
