@@ -33,7 +33,7 @@ function App() {
             <SettingsIcon />
           </IconButton>
         </div>
-        <h1>TDD Companion Form</h1>
+        <h1>TDD Companion</h1>
         <Form
           isDrawer={isDrawer}
           setIsDrawer={setIsDrawer}
