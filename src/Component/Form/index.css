@@ -46,9 +46,9 @@
 
 .history-drawer {
   max-height: 30rem;
-  padding: 2rem;
+  padding-top: 2rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  background-color: #0f171f;
+  /* background-color: #0f171f; */
 }
