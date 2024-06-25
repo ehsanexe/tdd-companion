@@ -279,7 +279,7 @@ const Form = ({ isDrawer, setIsDrawer, isHistory, setIsHistory }) => {
         </div>
       </div>
       {isFeedBack && (
-        <div>
+        <div className="feedback">
           <TextField
             id="feedback"
             label="Feedback"

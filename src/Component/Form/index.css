@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: space-between;
   margin: 2rem;
-  gap: 1rem;
+  gap: 2rem;
 }
 
 .tech-form {
@@ -30,6 +30,12 @@
   height: 100%;
   gap: 1rem;
   padding: 1rem;
+}
+
+.feedback {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .history-drawer {
