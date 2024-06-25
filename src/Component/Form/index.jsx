@@ -80,6 +80,7 @@ const Form = ({ isDrawer, setIsDrawer, isHistory, setIsHistory }) => {
   }
 
   const onFeedback = async () => {
+    window.scrollTo(0, 0)
     setIsLoading(true);
     const res = await sendFeedBack(chatHistory, feedback);
 
