@@ -13,13 +13,23 @@ const model = genAI.getGenerativeModel({
 export const getGeneratedResponse = async (data) => {
   const { description, language, framework, library, tags } = data;
 
-  const prompt = `Write code for test cases based on the provided user story and generate the initial skeleton of the implementation using Test Driven Development (TDD). Use the specified language, framework, and libraries. Also, include these tags in your implementation.
+  const prompt = `Write code for test cases based on the provided user story and generate the initial skeleton of the implementation using Test Driven Development (TDD).
+
+*Use the specified language, framework, and libraries. 
+*Also, include these tags in your implementation where applicable.
+
 user story: ${description}
 language: ${language}
 framework: ${framework}
 libraries: ${library}
 tags: ${tags}
-provide Model where applicable
+
+*include assertions in test cases
+*Use relevant framework specific functions where applicable
+*Use relevant library specific functions where applicable
+*provide Model where applicable
+*Use relevant specific functions mentioned in tags where applicable
+*Use language specific syntax and functions 
 `;
 
   // return;
@@ -47,7 +57,6 @@ provide Model where applicable
 };
 
 export const sendFeedBack = async (history, prompt) => {
-  console.log({ history, prompt });
   const chat = model.startChat({
     history,
   });
