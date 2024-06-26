@@ -5,6 +5,8 @@ h1 {
 
 .settings {
   position: absolute;
+  display: flex;
+  gap: 1rem;
   top: 2rem;
   right: 2rem;
 }

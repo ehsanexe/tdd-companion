@@ -1,0 +1,7 @@
+.history-item {
+  display: flex;
+  flex-direction: column;
+  background-color: #0f171f;
+  padding: 20px;
+  border-radius: 0.4rem;
+}
