@@ -1,4 +1,4 @@
-# TDDWizard
+# TDD Companion
 
 ## Introduction
 TDD Companion is a utility designed to streamline the development process using the Test-Driven Development (TDD) methodology. By leveraging generative AI, TDD Companion assists developers by accepting input requirements and outputting detailed test cases as prescribed by TDD. Additionally, it provides an initial skeleton of the code, helping developers get started quickly and ensure adherence to TDD principles.
