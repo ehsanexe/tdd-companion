@@ -6,6 +6,7 @@ const genAI = new GoogleGenerativeAI(API_KEY);
 // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
 const model = genAI.getGenerativeModel({
   model: "gemini-1.5-flash",
+  generationConfig: {responseMimeType: "application/json"},
   systemInstruction:
     "provide output in valid json format, example output: {testCases: string, code: string}. Do not include any explanations; just provide the JSON object.",
 });
