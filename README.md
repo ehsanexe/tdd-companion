@@ -22,6 +22,17 @@ Ensure you have the following installed on your machine:
     npm install
     ```
 
+### API Key Setup
+
+TDD Companion uses the generative AI API provided by Google. You need to generate an API key to use this feature.
+
+1. Go to [Google's Gemini API documentation](https://ai.google.dev/gemini-api/docs/api-key) to generate your API key.
+2. Once you have obtained your API key, open the `src/api.js` file.
+3. Replace the placeholder `const API_KEY = "";` with your actual API key:
+    ```javascript
+    const API_KEY = "your_key_here";
+    ```
+
 ### Running the Application
 You can run the application in two ways:
 
